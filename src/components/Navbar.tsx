@@ -70,7 +70,9 @@ export const Navbar: React.FC<NavbarProps> = ({
       case 'super_admin':
         return <span className="bg-red-100 text-red-800 text-[11px] font-bold px-2 py-0.5 rounded-full border border-red-200">SUPER ADMIN</span>;
       case 'admin':
-        return <span className="bg-purple-100 text-purple-800 text-[11px] font-bold px-2 py-0.5 rounded-full border border-purple-200">ADMIN</span>;
+        return <span className="bg-purple-100 text-purple-800 text-[11px] font-bold px-2 py-0.5 rounded-full border border-purple-200">ADMIN SEKOLAH</span>;
+      case 'kepala_sekolah':
+        return <span className="bg-indigo-100 text-indigo-800 text-[11px] font-bold px-2 py-0.5 rounded-full border border-indigo-200">KEPALA SEKOLAH</span>;
       case 'wali_kelas':
         return <span className="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">WALI KELAS</span>;
       case 'guru':
@@ -119,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   TP {tahunPelajaran.tahun_pelajaran} (Sm.{tahunPelajaran.semester})
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 font-medium truncate max-w-[140px] sm:max-w-[240px]">
+              <p className="text-[11px] text-slate-500 font-medium truncate max-w-[180px] sm:max-w-xs md:max-w-sm">
                 {sekolah.nama_sekolah}
               </p>
             </div>

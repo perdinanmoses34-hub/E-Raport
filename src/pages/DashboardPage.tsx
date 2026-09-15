@@ -80,8 +80,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currentUser, onNav
             Selamat Datang, {currentUser.nama}!
           </h1>
           <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed">
-            {role === 'super_admin' && 'Anda memiliki akses Super Administrator untuk mengelola seluruh ekosistem E-Raport SMP, sinkronisasi Google Sheets & Firebase, dan pengaturan sekolah.'}
-            {role === 'admin' && 'Kelola kelengkapan data siswa, guru, kelas, kurikulum, serta validasi penginputan nilai dan penerbitan raport sekolah.'}
+            {role === 'super_admin' && 'Anda memiliki akses Master Owner untuk pemeliharaan sistem dan konfigurasi global.'}
+            {role === 'admin' && 'Kelola kelengkapan data siswa, guru, kelas, pembuatan akun sekolah, serta validasi penginputan nilai dan penerbitan raport sekolah.'}
+            {role === 'kepala_sekolah' && 'Sebagai Kepala Sekolah, Anda dapat memantau capaian kurikulum seluruh rombel, memvalidasi nilai akhir peserta didik, dan mengesahkan penerbitan rapor.'}
             {role === 'wali_kelas' && `Sebagai Wali Kelas ${myClassWali?.nama_kelas || 'VII-A'}, Anda dapat memantau capaian belajar seluruh siswa, absensi, catatan perkembangan, dan cetak raport.`}
             {role === 'guru' && 'Silakan input dan lengkapi capaian kompetensi serta nilai tugas, UTS, UAS, praktik, dan proyek untuk rombel yang Anda ampu.'}
             {role === 'siswa' && 'Pantau hasil belajar, capaian kompetensi mata pelajaran, rekap absensi, serta unduh raport digital resmi Anda.'}
@@ -112,8 +113,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currentUser, onNav
         </div>
       </div>
 
-      {/* ADMIN & SUPER ADMIN STATS */}
-      {['super_admin', 'admin'].includes(role) && (
+      {/* ADMIN, KEPALA SEKOLAH & SUPER ADMIN STATS */}
+      {['super_admin', 'admin', 'kepala_sekolah'].includes(role) && (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">

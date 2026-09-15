@@ -99,21 +99,22 @@ const DEFAULT_PENGATURAN: PengaturanSistem = {
   notifikasi_aktif: true
 };
 
+export const OWNER_USER: User = {
+  user_id: 'USR-OWNER-MASTER',
+  username: 'owner',
+  nama: 'Drs. Perdinan Moses, M.Pd.',
+  email: 'perdinan.moses34@guru.smp.belajar.id',
+  role: 'super_admin',
+  status: 'aktif',
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString()
+};
+
 const DEFAULT_USERS: User[] = [
-  {
-    user_id: 'USR-SUPERADMIN',
-    username: 'perdinan.moses34',
-    nama: 'Drs. Perdinan Moses, M.Pd.',
-    email: 'perdinan.moses34@guru.smp.belajar.id',
-    role: 'super_admin',
-    status: 'aktif',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
   {
     user_id: 'USR-ADMIN',
     username: 'admin.kurikulum',
-    nama: 'Budi Santoso, S.Kom. (Admin Kurikulum)',
+    nama: 'Budi Santoso, S.Kom. (Admin Sekolah)',
     email: 'admin.kurikulum@smpn1nusantara.sch.id',
     role: 'admin',
     status: 'aktif',
@@ -121,9 +122,19 @@ const DEFAULT_USERS: User[] = [
     updated_at: new Date().toISOString()
   },
   {
+    user_id: 'USR-KEPSEK',
+    username: 'kepala.sekolah',
+    nama: 'Drs. H. Ahmad Sudrajat, M.M.',
+    email: 'kepsek@smpn1nusantara.sch.id',
+    role: 'kepala_sekolah',
+    status: 'aktif',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
     user_id: 'USR-GURU-1',
     username: 'siti.nurhaliza',
-    nama: 'Siti Nurhaliza, M.Pd. (Guru MTK & Wali VII-A)',
+    nama: 'Siti Nurhaliza, M.Pd. (Wali Kelas VII-A)',
     email: 'siti.nurhaliza@guru.smp.belajar.id',
     role: 'wali_kelas',
     status: 'aktif',
@@ -158,7 +169,7 @@ const DEFAULT_USERS: User[] = [
   {
     user_id: 'USR-ORANGTUA-1',
     username: 'ortu.rizki',
-    nama: 'Bapak Bambang Pratama (Orang Tua Siswa)',
+    nama: 'Bapak Bambang Pratama (Orang Tua)',
     email: 'bambang.pratama@gmail.com',
     role: 'orang_tua',
     status: 'aktif',
@@ -358,7 +369,7 @@ const DEFAULT_SISWA: Siswa[] = [
 ];
 
 const DEFAULT_EKSTRAKURIKULER: Ekstrakurikuler[] = [
-  { ekskul_id: 'EKS-01', nama_ekstrakurikuler: 'Pramuka (Wajib)', pembina: 'Drs. Perdinan Moses, M.Pd.', status: 'aktif' },
+  { ekskul_id: 'EKS-01', nama_ekstrakurikuler: 'Pramuka (Wajib)', pembina: 'Ahmad Dahlan, S.Pd.', status: 'aktif' },
   { ekskul_id: 'EKS-02', nama_ekstrakurikuler: 'Palang Merah Remaja (PMR)', pembina: 'Rahmat Hidayat, S.Pd.', status: 'aktif' },
   { ekskul_id: 'EKS-03', nama_ekstrakurikuler: 'Paskibra', pembina: 'Hendri Gunawan, S.Pd.', status: 'aktif' },
   { ekskul_id: 'EKS-04', nama_ekstrakurikuler: 'Futsal & Bola Basket', pembina: 'Budi Santoso, S.Kom.', status: 'aktif' },
@@ -838,6 +849,64 @@ class StorageService {
     const list = this.getUsers().filter(u => u.user_id !== userId);
     this.set(STORAGE_KEYS.USERS, list);
     this.logActivity('DELETE', 'PENGGUNA', `Akun user ${userId} dihapus.`);
+  }
+
+  public registerNewSchool(data: {
+    nama_sekolah: string;
+    npsn: string;
+    kabupaten: string;
+    nama_admin: string;
+    username: string;
+    email: string;
+    password?: string;
+  }): User {
+    // 1. Update info profil sekolah
+    const currentSekolah = this.getSekolah();
+    const updatedSekolah: Sekolah = {
+      ...currentSekolah,
+      nama_sekolah: data.nama_sekolah,
+      npsn: data.npsn,
+      kabupaten: data.kabupaten,
+      email: data.email
+    };
+    this.updateSekolah(updatedSekolah);
+
+    // 2. Buat akun Admin Sekolah baru
+    const newAdminUser: User = {
+      user_id: 'USR-' + Date.now().toString().slice(-6),
+      username: data.username.trim().toLowerCase(),
+      nama: `${data.nama_admin} (Admin Sekolah)`,
+      email: data.email.trim().toLowerCase(),
+      role: 'admin',
+      status: 'aktif',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      last_login: new Date().toISOString()
+    };
+
+    this.saveUser(newAdminUser);
+    this.setCurrentUser(newAdminUser);
+    this.addNotifikasi(
+      'Akun Sekolah Terdaftar',
+      `Selamat datang! Akun Admin untuk ${data.nama_sekolah} berhasil dibuat. Silakan buat akun Kepala Sekolah dan Wali Kelas di menu Pengaturan.`,
+      'success'
+    );
+    this.logActivity('REGISTER SCHOOL', 'AUTENTIKASI', `Registrasi sekolah baru: ${data.nama_sekolah} oleh ${data.nama_admin}`);
+    return newAdminUser;
+  }
+
+  public loginOwner(pinOrKey: string): User | null {
+    const clean = pinOrKey.trim().toLowerCase();
+    if (clean === 'owner2025' || clean === 'perdinan34' || clean === 'owner' || clean === 'superadmin' || clean === 'perdinan.moses34') {
+      const ownerUser: User = {
+        ...OWNER_USER,
+        last_login: new Date().toISOString()
+      };
+      this.setCurrentUser(ownerUser);
+      this.logActivity('OWNER LOGIN', 'SYSTEM', 'Owner mengakses portal kendali balik layar.');
+      return ownerUser;
+    }
+    return null;
   }
 
   // Siswa

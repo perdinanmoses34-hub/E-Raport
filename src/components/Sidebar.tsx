@@ -40,7 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'dashboard',
           label: 'Dashboard',
           icon: <LayoutDashboard className="w-4 h-4" />,
-          roles: ['super_admin', 'admin', 'guru', 'wali_kelas', 'siswa', 'orang_tua']
+          roles: ['super_admin', 'admin', 'kepala_sekolah', 'guru', 'wali_kelas', 'siswa', 'orang_tua']
         }
       ]
     },
@@ -51,19 +51,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'input_nilai',
           label: 'Input Nilai Siswa',
           icon: <Edit3 className="w-4 h-4" />,
-          roles: ['super_admin', 'admin', 'guru', 'wali_kelas']
+          roles: ['super_admin', 'admin', 'kepala_sekolah', 'guru', 'wali_kelas']
         },
         {
           id: 'pelengkap_raport',
           label: 'Sikap, Absen & Ekskul',
           icon: <Smile className="w-4 h-4" />,
-          roles: ['super_admin', 'admin', 'wali_kelas']
+          roles: ['super_admin', 'admin', 'kepala_sekolah', 'wali_kelas']
         },
         {
           id: 'cetak_raport',
           label: 'Cetak & PDF Raport',
           icon: <Printer className="w-4 h-4" />,
-          roles: ['super_admin', 'admin', 'wali_kelas', 'siswa', 'orang_tua'],
+          roles: ['super_admin', 'admin', 'kepala_sekolah', 'wali_kelas', 'siswa', 'orang_tua'],
           badge: 'A4 & PDF'
         }
       ]
@@ -75,25 +75,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'data_siswa',
           label: 'Data Siswa',
           icon: <GraduationCap className="w-4 h-4" />,
-          roles: ['super_admin', 'admin', 'guru', 'wali_kelas']
+          roles: ['super_admin', 'admin', 'kepala_sekolah', 'guru', 'wali_kelas']
         },
         {
           id: 'data_guru',
           label: 'Data Guru',
           icon: <Users className="w-4 h-4" />,
-          roles: ['super_admin', 'admin']
+          roles: ['super_admin', 'admin', 'kepala_sekolah']
         },
         {
           id: 'data_kelas',
           label: 'Data Kelas / Rombel',
           icon: <School className="w-4 h-4" />,
-          roles: ['super_admin', 'admin']
+          roles: ['super_admin', 'admin', 'kepala_sekolah']
         },
         {
           id: 'data_mapel',
           label: 'Mata Pelajaran',
           icon: <BookOpen className="w-4 h-4" />,
-          roles: ['super_admin', 'admin']
+          roles: ['super_admin', 'admin', 'kepala_sekolah']
         }
       ]
     },
@@ -104,32 +104,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'tahun_pelajaran',
           label: 'Tahun Pelajaran',
           icon: <Calendar className="w-4 h-4" />,
-          roles: ['super_admin', 'admin']
+          roles: ['super_admin', 'admin', 'kepala_sekolah']
         },
         {
           id: 'pengaturan_sistem',
-          label: 'Format & Bobot Nilai',
+          label: 'Format & Akun Sekolah',
           icon: <Sliders className="w-4 h-4" />,
-          roles: ['super_admin']
+          roles: ['super_admin', 'admin']
         },
         {
           id: 'pengaturan_database',
           label: 'Database Cloud',
           icon: <Database className="w-4 h-4" />,
-          roles: ['super_admin'],
+          roles: ['super_admin', 'admin'],
           badge: 'Sheets/FB'
         },
         {
           id: 'backup_restore',
           label: 'Backup & Restore',
           icon: <HardDriveDownload className="w-4 h-4" />,
-          roles: ['super_admin']
+          roles: ['super_admin', 'admin']
         },
         {
           id: 'logs',
           label: 'Log Aktivitas Audit',
           icon: <Activity className="w-4 h-4" />,
-          roles: ['super_admin', 'admin']
+          roles: ['super_admin', 'admin', 'kepala_sekolah']
         }
       ]
     }
@@ -147,7 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar Drawer */}
       <aside
-        className={`fixed top-0 left-0 z-40 h-full w-72 bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 shadow-2xl lg:shadow-none transition-transform duration-300 ease-in-out no-print ${
+        className={`fixed inset-y-0 left-0 z-40 w-72 bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 shadow-2xl transition-transform duration-300 ease-in-out no-print lg:static lg:inset-auto lg:h-screen lg:shrink-0 lg:shadow-none ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
@@ -243,8 +243,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Footer info */}
         <div className="p-3 border-t border-slate-800 bg-slate-950/70 text-[11px] text-slate-400 text-center">
-          <p className="font-semibold text-slate-300">SMP Terakreditasi A</p>
-          <p className="text-[10px] text-slate-400">Owner: perdinan.moses34@guru.smp.belajar.id</p>
+          <p className="font-bold text-slate-300">E-RAPORT SMP</p>
+          <p className="text-[10px] text-slate-400">Standar Resmi Kurikulum Merdeka</p>
         </div>
       </aside>
     </>

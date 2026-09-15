@@ -1,6 +1,6 @@
 // E-RAPORT SMP - Master Types & Interfaces
 
-export type UserRole = 'super_admin' | 'admin' | 'guru' | 'wali_kelas' | 'siswa' | 'orang_tua';
+export type UserRole = 'super_admin' | 'admin' | 'kepala_sekolah' | 'guru' | 'wali_kelas' | 'siswa' | 'orang_tua';
 
 export interface User {
   user_id: string;

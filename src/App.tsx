@@ -93,7 +93,7 @@ export default function App() {
       />
 
       {/* Main Layout Body */}
-      <div className="flex-1 flex max-w-7xl w-full mx-auto">
+      <div className="flex-1 flex w-full max-w-7xl mx-auto">
         {/* Sidebar Drawer / Desktop Sidebar */}
         <Sidebar
           isOpen={isSidebarOpen}
@@ -104,7 +104,7 @@ export default function App() {
         />
 
         {/* Dynamic Page Content */}
-        <main className="flex-1 lg:pl-72 p-3 sm:p-6 transition-all">
+        <main className="flex-1 min-w-0 p-3 sm:p-6 pb-28 lg:pb-12 transition-all">
           {renderCurrentPage()}
         </main>
       </div>
