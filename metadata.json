@@ -2,5 +2,7 @@
   "name": "E-RAPORT SMP",
   "description": "Sistem Informasi E-Raport SMP modern, profesional, dan responsif dengan integrasi Google Sheets, Google Drive, Firebase, serta PWA mobile-first untuk sekolah.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
