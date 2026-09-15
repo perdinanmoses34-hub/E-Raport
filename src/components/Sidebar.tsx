@@ -145,9 +145,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
       )}
 
-      {/* Sidebar Drawer */}
+      {/* Sidebar Drawer / Full Desktop Left Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-72 bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 shadow-2xl transition-transform duration-300 ease-in-out no-print lg:static lg:inset-auto lg:h-screen lg:shrink-0 lg:shadow-none ${
+        id="app-sidebar"
+        className={`fixed inset-y-0 left-0 z-40 w-72 bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 shadow-2xl transition-transform duration-300 ease-in-out no-print lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:shadow-none ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >

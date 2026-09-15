@@ -83,29 +83,31 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/70 text-slate-900 font-sans flex flex-col selection:bg-blue-100 selection:text-blue-900">
-      {/* Top Navbar */}
-      <Navbar
-        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-        currentUser={currentUser}
-        onOpenLogin={() => setIsLoginModalOpen(true)}
+    <div className="min-h-screen bg-slate-50/70 text-slate-900 font-sans flex flex-col lg:flex-row selection:bg-blue-100 selection:text-blue-900 w-full">
+      {/* Sidebar (Full-height sticky on desktop, Drawer on mobile) */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        currentPage={currentPage}
         onNavigate={handleNavigate}
+        currentUser={currentUser}
       />
 
-      {/* Main Layout Body */}
-      <div className="flex-1 flex w-full max-w-7xl mx-auto">
-        {/* Sidebar Drawer / Desktop Sidebar */}
-        <Sidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-          currentPage={currentPage}
-          onNavigate={handleNavigate}
+      {/* Main View Area (Header + Content) */}
+      <div className="flex-1 flex flex-col min-w-0 w-full">
+        {/* Top Navbar */}
+        <Navbar
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
           currentUser={currentUser}
+          onOpenLogin={() => setIsLoginModalOpen(true)}
+          onNavigate={handleNavigate}
         />
 
         {/* Dynamic Page Content */}
-        <main className="flex-1 min-w-0 p-3 sm:p-6 pb-28 lg:pb-12 transition-all">
-          {renderCurrentPage()}
+        <main className="flex-1 min-w-0 p-3 sm:p-6 lg:p-8 pb-28 lg:pb-12 transition-all">
+          <div className="w-full max-w-7xl mx-auto">
+            {renderCurrentPage()}
+          </div>
         </main>
       </div>
 

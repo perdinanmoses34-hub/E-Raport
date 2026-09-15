@@ -25,6 +25,29 @@
   background: #94a3b8;
 }
 
+/* Dark sidebar custom scrollbar - eliminate white track */
+aside::-webkit-scrollbar,
+aside *::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+aside::-webkit-scrollbar-track,
+aside *::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+aside::-webkit-scrollbar-thumb,
+aside *::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+aside::-webkit-scrollbar-thumb:hover,
+aside *::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
 /* A4 Print Optimization */
 @media print {
   @page {
