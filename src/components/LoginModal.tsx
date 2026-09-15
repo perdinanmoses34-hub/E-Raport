@@ -52,6 +52,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const handleManualLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
+    setSuccessMsg('');
 
     if (!identifier.trim()) {
       setErrorMsg('Masukkan username atau email Anda.');
@@ -61,17 +62,20 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      const clean = identifier.trim().toLowerCase();
-      const user = users.find(
-        u => u.email.toLowerCase() === clean || u.username.toLowerCase() === clean
-      );
+      const res = storage.authenticateUser(identifier, password);
 
-      if (user) {
-        storage.setCurrentUser(user);
-        onLoginSuccess(user);
-        onClose();
+      if (res.success && res.user) {
+        if (res.user.role === 'super_admin') {
+          setSuccessMsg('Autentikasi Super Admin berhasil. Membuka sistem kendali penuh...');
+        } else {
+          setSuccessMsg(`Berhasil masuk sebagai ${res.user.nama}`);
+        }
+        setTimeout(() => {
+          onLoginSuccess(res.user!);
+          onClose();
+        }, 500);
       } else {
-        setErrorMsg('Akun tidak ditemukan. Silakan periksa kembali username/email atau pilih salah satu akun sekolah di bawah.');
+        setErrorMsg(res.message || 'Akun tidak ditemukan atau kredensial tidak sesuai.');
       }
     }, 450);
   };
@@ -131,7 +135,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       onLoginSuccess(loggedInOwner);
       onClose();
     } else {
-      setOwnerError('Kunci Master tidak valid. Akses ditolak.');
+      setOwnerError('Password Super Admin tidak valid. Akses ditolak.');
     }
   };
 
@@ -468,7 +472,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             </form>
           )}
 
-          {/* Discreet Owner / Developer Access Link */}
+          {/* Discreet Super Admin / Owner Access Link */}
           <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
             <span>E-Raport SMP v2.4</span>
             <button
@@ -476,24 +480,25 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               onClick={() => {
                 setShowOwnerModal(true);
                 setOwnerError('');
+                setOwnerKey('');
               }}
-              className="text-slate-400 hover:text-slate-600 flex items-center gap-1 transition"
+              className="text-slate-500 hover:text-blue-700 flex items-center gap-1.5 font-semibold transition"
             >
-              <KeyRound className="w-3 h-3" />
-              <span>Akses Kendali Balik Layar</span>
+              <KeyRound className="w-3.5 h-3.5 text-blue-600" />
+              <span>Login Super Admin</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Secret Owner Master Key Prompt Modal */}
+      {/* Super Admin / Master Access Modal */}
       {showOwnerModal && (
         <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in">
           <div className="w-full max-w-sm rounded-3xl bg-slate-900 text-white p-6 border border-slate-800 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
               <div className="flex items-center gap-2 text-amber-400">
                 <ShieldCheck className="w-5 h-5" />
-                <h4 className="font-bold text-sm text-white">Portal Kendali Balik Layar</h4>
+                <h4 className="font-bold text-sm text-white">Login Super Admin (Tn. Timbu)</h4>
               </div>
               <button
                 onClick={() => setShowOwnerModal(false)}
@@ -503,8 +508,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               </button>
             </div>
 
-            <p className="text-xs text-slate-400 mb-4">
-              Akses khusus Developer / Owner Sistem untuk pemantauan sistem dan konfigurasi global. Masukkan Kunci Master Owner:
+            <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+              Portal kendali khusus Super Administrator sistem. Masukkan password Super Admin untuk akun <strong>tn.timbu</strong>:
             </p>
 
             {ownerError && (
@@ -515,32 +520,32 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
             <form onSubmit={handleOwnerAccess} className="space-y-4">
               <div>
+                <label className="block text-[11px] font-bold text-slate-300 mb-1">
+                  Password Super Admin
+                </label>
                 <input
                   type="password"
                   value={ownerKey}
                   onChange={(e) => setOwnerKey(e.target.value)}
-                  placeholder="Kunci Master Owner"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs focus:border-amber-400 focus:outline-none"
+                  placeholder="Masukkan password..."
+                  className="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs focus:border-blue-500 focus:outline-none"
                   autoFocus
                 />
-                <span className="text-[10px] text-slate-500 block mt-1">
-                  Kunci: owner2025
-                </span>
               </div>
 
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => setShowOwnerModal(false)}
-                  className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-semibold"
+                  className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-semibold"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold transition"
+                  className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-lg shadow-blue-900/50"
                 >
-                  Buka Kendali
+                  Masuk Sistem
                 </button>
               </div>
             </form>

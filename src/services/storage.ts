@@ -99,16 +99,23 @@ const DEFAULT_PENGATURAN: PengaturanSistem = {
   notifikasi_aktif: true
 };
 
-export const OWNER_USER: User = {
-  user_id: 'USR-OWNER-MASTER',
-  username: 'owner',
-  nama: 'Drs. Perdinan Moses, M.Pd.',
-  email: 'perdinan.moses34@guru.smp.belajar.id',
+export const DEFAULT_SUPER_ADMIN: User = {
+  user_id: 'USR-SUPERADMIN-TIMBU',
+  username: 'tn.timbu',
+  nama: 'Tn. Timbu (Super Administrator)',
+  email: 'tn.timbu@eraport.id',
   role: 'super_admin',
   status: 'aktif',
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString()
 };
+
+export const SUPER_ADMIN_CREDENTIALS = {
+  username: 'tn.timbu',
+  password: 'Eklesia_030918'
+};
+
+export const OWNER_USER: User = DEFAULT_SUPER_ADMIN;
 
 const DEFAULT_USERS: User[] = [
   {
@@ -704,12 +711,55 @@ class StorageService {
 
   // Current User / Session
   public getCurrentUser(): User {
-    return this.get<User>(STORAGE_KEYS.CURRENT_USER, DEFAULT_USERS[0]);
+    const raw = this.get<User | null>(STORAGE_KEYS.CURRENT_USER, null);
+    if (raw && raw.user_id && raw.nama && raw.role) {
+      return raw;
+    }
+    return DEFAULT_USERS[0];
   }
 
   public setCurrentUser(user: User): void {
     this.set(STORAGE_KEYS.CURRENT_USER, user);
     this.logActivity('LOGIN', 'AUTENTIKASI', `User ${user.nama} (${user.role}) masuk.`);
+  }
+
+  public authenticateUser(identifier: string, password?: string): { success: boolean; user?: User; message?: string } {
+    const cleanId = identifier.trim().toLowerCase();
+    const cleanPass = (password || '').trim();
+
+    // Check Super Admin default account: username: tn.timbu, password: Eklesia_030918
+    if (cleanId === 'tn.timbu' || cleanId === 'tn.timbu@eraport.id' || cleanId === 'superadmin') {
+      if (cleanPass === 'Eklesia_030918') {
+        const superAdminUser: User = {
+          ...DEFAULT_SUPER_ADMIN,
+          last_login: new Date().toISOString()
+        };
+        this.setCurrentUser(superAdminUser);
+        this.logActivity('LOGIN', 'AUTENTIKASI', `Super Admin Tn. Timbu berhasil masuk.`);
+        return { success: true, user: superAdminUser, message: 'Berhasil masuk sebagai Super Admin (Tn. Timbu)' };
+      } else {
+        return {
+          success: false,
+          message: 'Password akun Super Admin salah. Silakan masukkan password yang benar.'
+        };
+      }
+    }
+
+    // Check school users
+    const users = this.getUsers();
+    const user = users.find(
+      u => u.email.toLowerCase() === cleanId || u.username.toLowerCase() === cleanId
+    );
+
+    if (user) {
+      this.setCurrentUser(user);
+      return { success: true, user, message: `Berhasil masuk sebagai ${user.nama}` };
+    }
+
+    return {
+      success: false,
+      message: 'Akun tidak ditemukan. Silakan periksa kembali username/email atau pilih salah satu akun sekolah.'
+    };
   }
 
   public logout(): void {
@@ -896,15 +946,25 @@ class StorageService {
   }
 
   public loginOwner(pinOrKey: string): User | null {
-    const clean = pinOrKey.trim().toLowerCase();
-    if (clean === 'owner2025' || clean === 'perdinan34' || clean === 'owner' || clean === 'superadmin' || clean === 'perdinan.moses34') {
-      const ownerUser: User = {
-        ...OWNER_USER,
+    const raw = pinOrKey.trim();
+    const clean = raw.toLowerCase();
+    if (
+      raw === 'Eklesia_030918' ||
+      clean === 'eklesia_030918' ||
+      clean === 'tn.timbu' ||
+      clean === 'owner2025' ||
+      clean === 'perdinan34' ||
+      clean === 'owner' ||
+      clean === 'superadmin' ||
+      clean === 'perdinan.moses34'
+    ) {
+      const superAdminUser: User = {
+        ...DEFAULT_SUPER_ADMIN,
         last_login: new Date().toISOString()
       };
-      this.setCurrentUser(ownerUser);
-      this.logActivity('OWNER LOGIN', 'SYSTEM', 'Owner mengakses portal kendali balik layar.');
-      return ownerUser;
+      this.setCurrentUser(superAdminUser);
+      this.logActivity('SUPERADMIN LOGIN', 'SYSTEM', 'Super Admin (Tn. Timbu) mengakses sistem kendali.');
+      return superAdminUser;
     }
     return null;
   }

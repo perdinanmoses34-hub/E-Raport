@@ -148,12 +148,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Sidebar Drawer / Full Desktop Left Sidebar */}
       <aside
         id="app-sidebar"
-        className={`fixed inset-y-0 left-0 z-40 w-72 bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 shadow-2xl transition-transform duration-300 ease-in-out no-print lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:shadow-none ${
+        className={`fixed inset-y-0 left-0 z-40 w-72 bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 shadow-2xl transition-transform duration-300 ease-in-out no-print lg:relative lg:inset-auto lg:h-full lg:w-72 lg:shrink-0 lg:shadow-none ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         {/* Header Branding */}
-        <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+        <div className="shrink-0 p-4 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-sm shadow-md">
               ER
@@ -176,7 +176,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* User Card */}
-        <div className="px-4 py-3 bg-slate-950/50 border-b border-slate-800/80 flex items-center gap-3">
+        <div className="shrink-0 px-4 py-3 bg-slate-950/50 border-b border-slate-800/80 flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-500 text-white font-bold flex items-center justify-center shadow">
             {currentUser.nama.charAt(0)}
           </div>
@@ -189,7 +189,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Navigation Links */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 overscroll-contain">
           {sections.map((sec, idx) => {
             const visibleItems = sec.items.filter(item => item.roles.includes(role));
             if (visibleItems.length === 0) return null;
@@ -243,7 +243,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Footer info */}
-        <div className="p-3 border-t border-slate-800 bg-slate-950/70 text-[11px] text-slate-400 text-center">
+        <div className="shrink-0 p-3 border-t border-slate-800 bg-slate-950/70 text-[11px] text-slate-400 text-center">
           <p className="font-bold text-slate-300">E-RAPORT SMP</p>
           <p className="text-[10px] text-slate-400">Standar Resmi Kurikulum Merdeka</p>
         </div>

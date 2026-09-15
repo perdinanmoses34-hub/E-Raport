@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { storage } from './services/storage';
 import { User } from './types';
 import { Navbar } from './components/Navbar';
@@ -29,6 +29,7 @@ export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isSetupWizardOpen, setIsSetupWizardOpen] = useState<boolean>(false);
+  const mainScrollRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const unsub = storage.subscribe(() => {
@@ -46,6 +47,7 @@ export default function App() {
 
   const handleNavigate = (page: string) => {
     setCurrentPage(page);
+    mainScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -83,8 +85,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/70 text-slate-900 font-sans flex flex-col lg:flex-row selection:bg-blue-100 selection:text-blue-900 w-full">
-      {/* Sidebar (Full-height sticky on desktop, Drawer on mobile) */}
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-slate-50 text-slate-900 font-sans flex flex-col lg:flex-row selection:bg-blue-100 selection:text-blue-900 w-full">
+      {/* Sidebar (Full desktop height, independent scroll, off-canvas drawer on mobile) */}
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
@@ -93,8 +95,8 @@ export default function App() {
         currentUser={currentUser}
       />
 
-      {/* Main View Area (Header + Content) */}
-      <div className="flex-1 flex flex-col min-w-0 w-full">
+      {/* Main View Area (Header + Independently Scrolled Content) */}
+      <div className="flex-1 flex flex-col min-w-0 w-full lg:h-full lg:overflow-hidden">
         {/* Top Navbar */}
         <Navbar
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -103,8 +105,12 @@ export default function App() {
           onNavigate={handleNavigate}
         />
 
-        {/* Dynamic Page Content */}
-        <main className="flex-1 min-w-0 p-3 sm:p-6 lg:p-8 pb-28 lg:pb-12 transition-all">
+        {/* Dynamic Page Content with its own dedicated scroll track */}
+        <main
+          ref={mainScrollRef}
+          id="main-content-scroll"
+          className="flex-1 min-w-0 overflow-y-auto p-3 sm:p-6 lg:p-8 pb-28 lg:pb-12 overscroll-contain"
+        >
           <div className="w-full max-w-7xl mx-auto">
             {renderCurrentPage()}
           </div>

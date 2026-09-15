@@ -85,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-8 py-2.5 transition-all no-print w-full">
+    <header className="sticky top-0 z-20 shrink-0 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-8 py-2.5 transition-all no-print w-full">
       <div className="flex items-center justify-between gap-3 w-full">
         {/* Left: Mobile Menu button & School Branding */}
         <div className="flex items-center gap-2.5">

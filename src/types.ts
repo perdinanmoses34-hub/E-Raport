@@ -22,6 +22,7 @@ export interface Sekolah {
   sekolah_id: string;
   nama_sekolah: string;
   npsn: string;
+  akreditasi?: string;
   alamat: string;
   desa: string;
   kecamatan: string;
@@ -73,6 +74,7 @@ export interface Guru {
   nip: string;
   nuptk: string;
   nama_lengkap: string;
+  nama_guru?: string;
   jenis_kelamin: 'L' | 'P';
   tempat_lahir: string;
   tanggal_lahir: string;
@@ -88,8 +90,9 @@ export interface Guru {
 export interface Kelas {
   kelas_id: string;
   nama_kelas: string; // e.g. "VII-A", "VIII-B", "IX-C"
-  tingkat: 7 | 8 | 9;
+  tingkat: 7 | 8 | 9 | number | any;
   jurusan?: string; // e.g. "Umum"
+  kapasitas?: number;
   wali_kelas_id: string;
   tahun_id: string;
   status: 'aktif' | 'nonaktif';
@@ -102,6 +105,8 @@ export interface MataPelajaran {
   kelompok: 'A' | 'B' | 'Muatan Lokal';
   tingkat: number; // 7, 8, 9, or 0 (semua tingkat)
   jam_pelajaran: number;
+  jam_per_minggu?: number;
+  deskripsi_kompetensi?: string;
   kkm: number; // Kriteria Ketercapaian Tujuan Pembelajaran / KKM, default 75
   status: 'aktif' | 'nonaktif';
 }
@@ -240,6 +245,9 @@ export interface GradingConfig {
   rentang_a: number;
   rentang_b: number;
   rentang_c: number;
+  rentang_a_min?: number;
+  rentang_b_min?: number;
+  rentang_c_min?: number;
 }
 
 export interface BobotNilai {
@@ -275,6 +283,7 @@ export interface LogAktivitas {
   user_id: string;
   user_name: string;
   user_role: string;
+  role?: string;
   aktivitas: string; // 'LOGIN', 'INPUT NILAI', 'LOCK NILAI', 'GENERATE RAPORT', etc.
   modul: string;
   waktu: string;
