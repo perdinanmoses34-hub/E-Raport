@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSuperAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == "perdinan.moses34@guru.smp.belajar.id" ||
+        request.auth.token.email == "destinyradio2810@gmail.com" ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "super_admin"
+      );
+    }
+
+    function isAdminOrSuperAdmin() {
+      return isSignedIn() && (
+        isSuperAdmin() ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+      );
+    }
+
+    // Sekolah Profile
+    match /sekolah/{sekolahId} {
+      allow read: if isSignedIn();
+      allow write: if isSuperAdmin();
+    }
+
+    // Users
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isSuperAdmin();
+    }
+
+    // Nilai
+    match /nilai/{nilaiId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && (isAdminOrSuperAdmin() || resource.data.status != "locked");
+      allow delete: if isAdminOrSuperAdmin();
+    }
+
+    // Notifikasi
+    match /notifikasi/{notificationId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn();
+      allow delete: if isAdminOrSuperAdmin();
+    }
+  }
+}

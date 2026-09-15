@@ -1,0 +1,86 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "User profile with RBAC roles for E-Raport SMP",
+      "type": "object",
+      "properties": {
+        "user_id": { "type": "string", "maxLength": 128 },
+        "username": { "type": "string", "maxLength": 64 },
+        "nama": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 128 },
+        "role": { "type": "string", "enum": ["super_admin", "admin", "guru", "wali_kelas", "siswa", "orang_tua"] },
+        "status": { "type": "string", "enum": ["aktif", "nonaktif"] },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["user_id", "nama", "email", "role", "status"]
+    },
+    "sekolah": {
+      "title": "Sekolah",
+      "description": "School identity and profile configuration",
+      "type": "object",
+      "properties": {
+        "sekolah_id": { "type": "string" },
+        "nama_sekolah": { "type": "string", "maxLength": 128 },
+        "npsn": { "type": "string", "maxLength": 16 },
+        "alamat": { "type": "string", "maxLength": 255 },
+        "kepala_sekolah": { "type": "string", "maxLength": 128 },
+        "nip_kepala_sekolah": { "type": "string", "maxLength": 32 }
+      },
+      "required": ["sekolah_id", "nama_sekolah", "npsn"]
+    },
+    "nilai": {
+      "title": "Nilai",
+      "description": "Student subject grades and competency assessment",
+      "type": "object",
+      "properties": {
+        "nilai_id": { "type": "string" },
+        "siswa_id": { "type": "string" },
+        "mapel_id": { "type": "string" },
+        "kelas_id": { "type": "string" },
+        "guru_id": { "type": "string" },
+        "tahun_id": { "type": "string" },
+        "semester": { "type": "string", "enum": ["1", "2"] },
+        "nilai_akhir": { "type": "number" },
+        "predikat": { "type": "string", "enum": ["A", "B", "C", "D"] },
+        "deskripsi": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["draft", "submitted", "verified", "locked"] }
+      },
+      "required": ["nilai_id", "siswa_id", "mapel_id", "kelas_id", "status"]
+    },
+    "notifikasi": {
+      "title": "Notifikasi",
+      "description": "Realtime notification event",
+      "type": "object",
+      "properties": {
+        "notification_id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "title": { "type": "string", "maxLength": 128 },
+        "message": { "type": "string", "maxLength": 500 },
+        "type": { "type": "string", "enum": ["info", "success", "warning", "alert"] },
+        "read_status": { "type": "boolean" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["notification_id", "user_id", "title", "message"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "users",
+      "description": "User profile with role assignment"
+    },
+    "/sekolah/{sekolahId}": {
+      "schema": "sekolah",
+      "description": "School identity and profile"
+    },
+    "/nilai/{nilaiId}": {
+      "schema": "nilai",
+      "description": "Student grade records"
+    },
+    "/notifikasi/{notificationId}": {
+      "schema": "notifikasi",
+      "description": "System and user notifications"
+    }
+  }
+}

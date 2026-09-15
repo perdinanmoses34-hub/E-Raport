@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="100" fill="url(#grad)" />
+  <circle cx="256" cy="256" r="210" stroke="rgba(255,255,255,0.15)" stroke-width="4" fill="none" />
+  
+  <!-- Graduation cap & open book academic emblem -->
+  <path d="M256 120 L390 185 L256 250 L122 185 Z" fill="#ffffff" />
+  <path d="M370 210 V275 C370 275 360 300 256 300 C152 300 142 275 142 275 V210 L256 265 Z" fill="#e2e8f0" opacity="0.9" />
+  <path d="M390 185 L415 250 V330" stroke="#fbbf24" stroke-width="8" stroke-linecap="round" fill="none" />
+  <circle cx="415" cy="335" r="10" fill="#fbbf24" />
+
+  <!-- Open Book -->
+  <path d="M140 330 C180 320 220 330 256 345 C292 330 332 320 372 330 V405 C332 395 292 405 256 420 C220 405 180 395 140 405 Z" fill="#ffffff" />
+  <path d="M256 345 V420" stroke="#0284c7" stroke-width="4" stroke-linecap="round" />
+  
+  <!-- Star badge -->
+  <polygon points="256,215 262,230 278,230 265,240 270,255 256,245 242,255 247,240 234,230 250,230" fill="url(#gold)" />
+</svg>

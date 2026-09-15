@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "E-RAPORT SMP",
+  "short_name": "E-Raport",
+  "description": "Sistem Informasi E-Raport SMP modern, profesional, dan responsif dengan integrasi Google Sheets, Drive, dan Firebase.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
